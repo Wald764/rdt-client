@@ -31,6 +31,7 @@ public class Torrents(
     {
         ReferenceHandler = ReferenceHandler.IgnoreCycles
     };
+    private readonly DebridLinkFrClient _debridLinkFrClient;
 
     private ITorrentClient TorrentClient
     {
@@ -38,16 +39,34 @@ public class Torrents(
         {
             return Settings.Get.Provider.Provider switch
             {
-                Provider.Premiumize => premiumizeTorrentClient,
-                Provider.RealDebrid => realDebridTorrentClient,
-                Provider.AllDebrid => allDebridTorrentClient,
+                Provider.Premiumize => _premiumizeTorrentClient,
+                Provider.RealDebrid => _realDebridTorrentClient,
+                Provider.AllDebrid => _allDebridTorrentClient,
+                Provider.DebridLinkFr => _debridLinkFrClient,
                 Provider.TorBox => torBoxTorrentClient,
-                _ => throw new("Invalid Provider")
+                _ => throw new Exception("Invalid Provider")
             };
         }
     }
 
     private static readonly SemaphoreSlim TorrentResetLock = new(1, 1);
+
+    public Torrents(ILogger<Torrents> logger,
+                    TorrentData torrentData, 
+                    Downloads downloads,
+                    AllDebridTorrentClient allDebridTorrentClient,
+                    PremiumizeTorrentClient premiumizeTorrentClient,
+                    RealDebridTorrentClient realDebridTorrentClient,
+                    DebridLinkFrClient debridLinkFrClient)
+    {
+        _logger = logger;
+        _torrentData = torrentData;
+        _downloads = downloads;
+        _allDebridTorrentClient = allDebridTorrentClient;
+        _premiumizeTorrentClient = premiumizeTorrentClient;
+        _realDebridTorrentClient = realDebridTorrentClient;
+        _debridLinkFrClient = debridLinkFrClient;
+    }
 
     public async Task<IList<Torrent>> Get()
     {
