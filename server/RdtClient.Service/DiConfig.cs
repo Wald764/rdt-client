@@ -21,6 +21,7 @@ public static class DiConfig
         services.AddScoped<Settings>();
         services.AddScoped<Torrents>();
         services.AddScoped<TorrentRunner>();
+        services.AddScoped<DebridLinkFrClient>();
 
         services.AddSingleton<IAuthorizationHandler, AuthSettingHandler>();
             

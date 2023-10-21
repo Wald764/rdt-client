@@ -56,6 +56,10 @@
                 >Use this link to sign up to Premiumize.</a
               >
               <br />
+              <a href="https://debrid-link.fr/" target="_blank" rel="noopener"
+                >Use this link to sign up to DebridLinkFr.</a
+              >
+              <br />
               <small>(Referal links)</small>
             </div>
             <div class="field">
@@ -65,6 +69,7 @@
                   <option [ngValue]="0">Real-Debrid</option>
                   <option [ngValue]="1">AllDebrid</option>
                   <option [ngValue]="2">Premiumize</option>
+                  <option [ngValue]="3">DebridLinkFr</option>
                 </select>
               </div>
             </div>
@@ -89,6 +94,12 @@
                 You can find your API key here:
                 <a href="https://www.premiumize.me/account" target="_blank" rel="noopener"
                   >https://www.premiumize.me/account</a
+                >.
+              </p>
+              <p class="help" *ngIf="provider === 3">
+                You can find your API key here:
+                <a href="https://debrid-link.fr/webapp/apikey" target="_blank" rel="noopener"
+                  >https://debrid-link.fr/webapp/apikey</a
                 >.
               </p>
             </div>

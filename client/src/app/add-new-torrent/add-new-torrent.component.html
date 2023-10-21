@@ -74,7 +74,7 @@
     <div class="field">
       <label class="label">Post Torrent Download Action</label>
       <div class="control select is-fullwidth">
-        <select [(ngModel)]="downloadAction" [disabled]="provider === 'AllDebrid' || provider === 'Premiumize'">
+        <select [(ngModel)]="downloadAction" [disabled]="provider === 'AllDebrid' || provider === 'Premiumize' || provider === 'DebridLinkFr' ">
           <option [ngValue]="0">Download all files</option>
           <option [ngValue]="1">Download all available files</option>
           <option [ngValue]="2">Manually pick files</option>
@@ -82,7 +82,7 @@
       </div>
       <p class="help">When a torrent is fully downloaded on the provider, perform this action.</p>
       <p class="help" *ngIf="provider === 'AllDebrid'">
-        This option is only available for RealDebrid. AllDebrid and Premiumize will always download the full torrent.
+        This option is only available for RealDebrid. AllDebrid, Premiumize or DebridLinkFr will always download the full torrent.
       </p>
     </div>
 
