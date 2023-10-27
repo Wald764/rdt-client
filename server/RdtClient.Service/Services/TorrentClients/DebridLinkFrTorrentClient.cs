@@ -220,6 +220,8 @@ public class DebridLinkFrClient : ITorrentClient
             torrent.RdStatus = rdTorrent.Status switch
             {
                 "100" => TorrentStatus.Finished,
+                "2" => TorrentStatus.Finished,
+                "6" => TorrentStatus.Finished,
                 _ => TorrentStatus.Error
             };
         }
