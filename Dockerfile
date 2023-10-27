@@ -10,13 +10,16 @@ WORKDIR /appclient
 
 RUN apk add --no-cache git python3 py3-pip make g++
 
+COPY . .
+
 RUN \
    echo "**** Cloning Source Code ****" && \
-   git clone https://github.com/rogerfar/rdt-client.git . && \
+   #git clone https://github.com/Wald764/rdt-client.git . && \
    cd client && \
    echo "**** Building Code  ****" && \
    npm ci && \
    npx ng build --output-path=out
+
 
 RUN ls -FCla /appclient/root
 
@@ -32,7 +35,7 @@ WORKDIR /appserver
 
 RUN \
    echo "**** Cloning Source Code ****" && \
-   git clone https://github.com/rogerfar/rdt-client.git . && \
+   git clone https://github.com/Wald764/rdt-client.git . && \
    echo "**** Building Source Code for $TARGETPLATFORM on $BUILDPLATFORM ****" && \
    cd server && \
    dotnet restore --no-cache RdtClient.sln && dotnet publish --no-restore -c Release -o out ; 
