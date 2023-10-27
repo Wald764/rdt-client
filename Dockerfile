@@ -10,6 +10,8 @@ WORKDIR /appclient
 
 RUN apk add --no-cache git python3 py3-pip make g++
 
+COPY . .
+
 COPY client ./client
 COPY root ./root
 RUN \
@@ -17,6 +19,7 @@ RUN \
    echo "**** Building Code  ****" && \
    npm ci && \
    npx ng build --output-path=out
+
 
 RUN ls -FCla /appclient/root
 
