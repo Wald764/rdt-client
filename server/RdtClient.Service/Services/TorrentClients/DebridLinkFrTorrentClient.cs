@@ -216,11 +216,25 @@ public class DebridLinkFrClient : ITorrentClient
             torrent.RdSpeed = rdTorrent.Speed;
             torrent.RdSeeders = rdTorrent.Seeders;
             torrent.RdStatusRaw = rdTorrent.Status;
-
+            /**
+             * 
+             *  0   Torrent is stopped
+             *  1   Torrent is queued to verify local data
+             *  2   Torrent is verifying local data
+             *  3   Torrent is queued to download
+             *  4   Torrent is downloading
+             *  5   Torrent is queued to seed
+             *  6   Torrent is seeding
+             *  100  Torrent is stored
+             */
             torrent.RdStatus = rdTorrent.Status switch
             {
                 "100" => TorrentStatus.Finished,
-                "2" => TorrentStatus.Finished,
+                "1" => TorrentStatus.Processing,
+                "2" => TorrentStatus.Processing,
+                "3" => TorrentStatus.Processing,
+                "4" => TorrentStatus.Downloading,
+                "5" => TorrentStatus.Finished,
                 "6" => TorrentStatus.Finished,
                 _ => TorrentStatus.Error
             };
