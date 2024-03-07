@@ -26,10 +26,4 @@
     <ProjectReference Include="..\RdtClient.Data\RdtClient.Data.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="DownloaderNET">
-      <HintPath>..\DownloaderNET.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>
