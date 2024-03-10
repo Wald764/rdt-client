@@ -118,7 +118,7 @@ public class DebridLinkFrClient : ITorrentClient
         return new TorrentClientUser
         {
             Username = user.Username,
-            Expiration = user.PremiumLeft > 0 ? DateTimeOffset.Now.AddDays(user.PremiumLeft) : null
+            Expiration = user.PremiumLeft > 0 ? DateTimeOffset.Now.AddSeconds(user.PremiumLeft) : null
         };
     }
 
