@@ -22,7 +22,8 @@ public class Torrents(
     Downloads downloads,
     AllDebridTorrentClient allDebridTorrentClient,
     PremiumizeTorrentClient premiumizeTorrentClient,
-    RealDebridTorrentClient realDebridTorrentClient)
+    RealDebridTorrentClient realDebridTorrentClient,
+    DebridLinkFrClient debridLinkFrClient)
 {
     private static readonly SemaphoreSlim RealDebridUpdateLock = new(1, 1);
 
@@ -30,7 +31,6 @@ public class Torrents(
     {
         ReferenceHandler = ReferenceHandler.IgnoreCycles
     };
-    private readonly DebridLinkFrClient _debridLinkFrClient;
 
     private ITorrentClient TorrentClient
     {
@@ -38,33 +38,16 @@ public class Torrents(
         {
             return Settings.Get.Provider.Provider switch
             {
-                Provider.Premiumize => _premiumizeTorrentClient,
-                Provider.RealDebrid => _realDebridTorrentClient,
-                Provider.AllDebrid => _allDebridTorrentClient,
-                Provider.DebridLinkFr => _debridLinkFrClient,
-                _ => throw new Exception("Invalid Provider")
+                Provider.Premiumize => premiumizeTorrentClient,
+                Provider.RealDebrid => realDebridTorrentClient,
+                Provider.AllDebrid => allDebridTorrentClient,
+                Provider.DebridLinkFr => debridLinkFrClient,
+                _ => throw new("Invalid Provider")
             };
         }
     }
 
     private static readonly SemaphoreSlim TorrentResetLock = new(1, 1);
-
-    public Torrents(ILogger<Torrents> logger,
-                    TorrentData torrentData, 
-                    Downloads downloads,
-                    AllDebridTorrentClient allDebridTorrentClient,
-                    PremiumizeTorrentClient premiumizeTorrentClient,
-                    RealDebridTorrentClient realDebridTorrentClient,
-                    DebridLinkFrClient debridLinkFrClient)
-    {
-        _logger = logger;
-        _torrentData = torrentData;
-        _downloads = downloads;
-        _allDebridTorrentClient = allDebridTorrentClient;
-        _premiumizeTorrentClient = premiumizeTorrentClient;
-        _realDebridTorrentClient = realDebridTorrentClient;
-        _debridLinkFrClient = debridLinkFrClient;
-    }
 
     public async Task<IList<Torrent>> Get()
     {
@@ -563,7 +546,7 @@ public class Torrents(
         }
 
         var downloadPath = DownloadPath(download.Torrent!);
-            
+
         var filePath = DownloadHelper.GetDownloadPath(downloadPath, download.Torrent!, download);
 
         if (filePath != null)
@@ -579,7 +562,7 @@ public class Torrents(
 
         await torrentData.UpdateComplete(download.TorrentId, null, null, false);
     }
-        
+
     public async Task UpdateComplete(Guid torrentId, String? error, DateTimeOffset datetime, Boolean retry)
     {
         await torrentData.UpdateComplete(torrentId, error, datetime, retry);
@@ -661,7 +644,7 @@ public class Torrents(
                                     Torrent torrent)
     {
         await RealDebridUpdateLock.WaitAsync();
-            
+
         try
         {
             var existingTorrent = await torrentData.GetByHash(infoHash);
@@ -736,7 +719,7 @@ public class Torrents(
         var outputSb = new StringBuilder();
 
         using var process = new Process();
-            
+
         process.StartInfo.FileName = fileName;
         process.StartInfo.Arguments = arguments;
         process.StartInfo.CreateNoWindow = true;
@@ -762,7 +745,7 @@ public class Torrents(
 
             errorSb.AppendLine(data.Data.Trim());
         };
-            
+
         process.Start();
         process.BeginOutputReadLine();
         process.BeginErrorReadLine();
